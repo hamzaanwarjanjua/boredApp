@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import { Header, RNIcon, ListHeader,DetailCard } from "../components";
 
 const BASE_URL = 'https://www.boredapi.com/api/activity'
 
 export const Home = () => {
-    const [detail, setDetail] = useState({})
+    const [detail, setDetail] = useState([])
     const fetchActivity =async (data) => {
         console.log(data)
         let url = BASE_URL
@@ -24,24 +24,37 @@ export const Home = () => {
         })
         const jsonData = await  res.json();
 
-        setDetail(jsonData)
+        // setDetail(jsonData)
         if(jsonData.error) {
             Alert.alert('Invalid Value')
+        } else {
+            setDetail([jsonData, ...detail])
         }
-        console.log("🚀 ~ file: Home.Screen.js:13 ~ fetchActivity ~ jsonData:", jsonData)
+        // console.log("🚀 ~ file: Home.Screen.js:13 ~ fetchActivity ~ jsonData:", jsonData)
 
     }
     useEffect(() => {
         fetchActivity()
     },[])
-
+    const renderItem = ({ item, index}) => {
+        return (
+            <DetailCard data={item} key={item.key} />
+        )
+    }
     return (
         <View style={styles.container}>
             <Header title={"Bored App"} />
             <ListHeader onPressHandler={(data) => {
                 fetchActivity(data)
             }} />
-            <DetailCard data={detail} />
+            <View style={{ flex: 1, zIndex: -12 }}>
+
+            <FlatList
+                data={detail}
+                renderItem={renderItem}
+                />
+                </View>
+            {/* <DetailCard data={detail} /> */}
         </View>
     )
 }
