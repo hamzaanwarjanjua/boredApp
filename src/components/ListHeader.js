@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Platform } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { COLORS } from "../utils/theme";
 import { RNIcon } from "./Icon";
@@ -33,6 +33,9 @@ export const ListHeader = ({onPressHandler}) => {
       style={{
         borderColor: COLORS.border
       }}
+      listMode={Platform.select({
+        android: "MODAL",
+      })}
       />
         <View style={styles.container}>
     <View style={{ width: '82%', }}>
